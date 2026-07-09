@@ -21,3 +21,9 @@ func GetIPAddr() string {
 
 	return localIPAddr.String()
 }
+
+func GetPort() string {
+	port := "8080"
+
+	return port
+}
