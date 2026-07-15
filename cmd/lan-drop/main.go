@@ -12,8 +12,9 @@ func main() {
 	fmt.Println("LAN Drop started")
 	ip := network.GetIPAddr()
 	port := server.GetPort()
+	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 
-	err := server.StartListen(ip, port)
+	err := server.StartListen(listenAddr)
 	if err != nil {
 		log.Fatalln(err)
 	}

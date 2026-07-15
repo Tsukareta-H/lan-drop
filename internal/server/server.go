@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/Tsukareta-H/lan-drop/internal/file"
 	"github.com/Tsukareta-H/lan-drop/internal/qr"
 )
 
@@ -13,13 +14,14 @@ func GetPort() string {
 	return port
 }
 
-func StartListen(ipAddr string, port string) error {
-	listenAddr := fmt.Sprintf("%s:%s", ipAddr, port)
+func StartListen(listenAddr string) error {
 	targetURL := fmt.Sprintf("http://%s", listenAddr)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Hello!")
+		fmt.Fprintln(w, "Hello!")
 	})
 	fmt.Println("服務啓動中...")
+	file.FileDownload("./download")
+
 	fmt.Printf("請輸入 URL: %s\n或掃描下方 QR Code\n", targetURL)
 
 	qrString, err := qr.QRCode(targetURL)
