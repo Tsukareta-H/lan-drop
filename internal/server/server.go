@@ -17,10 +17,36 @@ func GetPort() string {
 func StartListen(listenAddr string) error {
 	targetURL := fmt.Sprintf("http://%s", listenAddr)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Hello!")
+		fmt.Fprintln(w, `<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>LAN Drop</title>
+</head>
+
+<body>
+
+<h1>LAN Drop</h1>
+
+<h2>上傳</h2>
+
+<form action="/upload/" method="post" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <button>上傳</button>
+</form>
+
+<hr>
+
+<h2>下載</h2>
+
+<a href="/download/">查看共享檔案</a>
+
+</body>
+</html>`)
 	})
 	fmt.Println("服務啓動中...")
-	file.FileDownload("./download")
+	http.Handle("/download/", http.StripPrefix("/download", file.FileDownload("./downloads")))
+	http.HandleFunc("/upload/", file.FileUpload)
 
 	fmt.Printf("請輸入 URL: %s\n或掃描下方 QR Code\n", targetURL)
 
